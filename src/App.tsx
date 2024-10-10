@@ -256,24 +256,92 @@
 
 
 // CH5 - useContext
-import {useState} from 'react';
-import './App.css';
-import Page from './component/Page';
-import { ThemeContext } from './context/ThemeContext';
-import { UserContext } from './context/UserContext';
+// import {useState} from 'react';
+// import './App.css';
+// import Page from './component/Page';
+// import { ThemeContext } from './context/ThemeContext';
+// import { UserContext } from './context/UserContext';
 
 
+// function App() {
+//   const [isDark, setIsDark] = useState(false);
+
+//   return (
+//     <UserContext.Provider value={'김동연'}>
+//       <ThemeContext.Provider value={{isDark, setIsDark}}>
+//         <Page />;
+//       </ThemeContext.Provider>
+//     </UserContext.Provider>
+//   );
+// }
+
+// export default App
+
+
+// CH7 - useCallback ex1
+// import { useState, useCallback, useEffect} from 'react'
+
+// function App() {
+//   const [number, setNumber] = useState(0);
+//   const [toggle, setToggle] = useState(true);
+
+
+//   const someFunction = useCallback(() =>{
+//     console.log(`SomeFun = ${number}`);
+//     return;
+//   }, [number]); // 새롭게 랜더링 되지 않아 useEffect가 안 불린다
+
+//   useEffect(() =>{
+//     console.log("someFunction이 변경되었습니다")
+//   },[someFunction])
+
+//   return (
+//     <div>
+//       <input 
+//         type='number'
+//         value={number}
+//         onChange={(e) => setNumber(e.target.value)}
+//       />
+//       <button onClick={()=> setToggle(!toggle)}>{toggle.toString()}</button>
+//       <br />
+//       <button onClick={someFunction}>CallFunction</button>
+//     </div>
+//   )
+// }
+
+// export default App
+
+
+// CH7 - useCallback ex2
+import { useState, useCallback, useEffect} from 'react'
+import Box from './component/Box'
 function App() {
+  const [size, setSize] = useState(100);
   const [isDark, setIsDark] = useState(false);
 
+  const createBoxStyle = useCallback (() =>{
+    return {
+      backgroundColor:'pink',
+      width: `${size}px`,
+      height: `${size}px`
+    };
+  }, [size]);
+
   return (
-    <UserContext.Provider value={'김동연'}>
-      <ThemeContext.Provider value={{isDark, setIsDark}}>
-        <Page />;
-      </ThemeContext.Provider>
-    </UserContext.Provider>
-  );
+    <div 
+      style={{
+        background: isDark ? 'black': 'white',
+      }}
+    >
+      <input 
+        type='number'
+        value={size}
+        onChange={(e) => setSize(e.target.value)}
+      />
+      <button onClick={() => setIsDark(!isDark)}>Change Theme</button>
+      <Box createBoxStyle={createBoxStyle}></Box>
+    </div>
+  )
 }
 
 export default App
-
